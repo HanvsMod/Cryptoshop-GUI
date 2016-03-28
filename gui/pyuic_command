@@ -1,0 +1,1 @@
+pyuic5 principale.ui > ui_principale.py
