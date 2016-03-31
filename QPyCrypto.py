@@ -1,24 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*-coding:Utf-8 -*
 
-# QPyCrypto- gpg gui
+# Cryptoshop- gpg gui
 # Copyright(C) 2016 CORRAIRE Fabrice. antidote1911@gmail.com
 
 # ############################################################################
-# #This file is part of QPyCrypto.
+# #This file is part of Cryptoshop.
 # #
-##    QPyCrypto is free software: you can redistribute it and/or modify
+##    Cryptoshop is free software: you can redistribute it and/or modify
 ##    it under the terms of the GNU General Public License as published by
 ##    the Free Software Foundation, either version 3 of the License, or
 ##    (at your option) any later version.
 ##
-##    QPyCrypto is distributed in the hope that it will be useful,
+##    Cryptoshop is distributed in the hope that it will be useful,
 ##    but WITHOUT ANY WARRANTY; without even the implied warranty of
 ##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##    GNU General Public License for more details.
 ##
 ##    You should have received a copy of the GNU General Public License
-##    along with QPyCrypto.  If not, see <http://www.gnu.org/licenses/>.
+##    along with Cryptoshop.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
 
 from PyQt5.QtWidgets import QMainWindow, QDialog, QApplication, QFileDialog, QLineEdit, QMessageBox, QInputDialog, \
@@ -34,6 +34,7 @@ import gnupg
 import os
 import Crypto_gpg
 import simplecrypt2
+import simplehash
 
 
 def keymanager():
@@ -89,10 +90,20 @@ class MasterForm(QMainWindow):
         self.ui.actionSHA384.triggered.connect(self.hashfilesha384)
         self.ui.actionSHA256.triggered.connect(self.hashfilesha256)
         self.ui.actionSHA224.triggered.connect(self.hashfilesha224)
-        self.ui.actionSHA.triggered.connect(self.hashfilesha)
-        self.ui.actionMD5.triggered.connect(self.hashfilemd5)
+        self.ui.actionSHA_1.triggered.connect(self.hashfilesha)
+        self.ui.actionMD5_2.triggered.connect(self.hashfilemd5)
+        self.ui.actionMD2.triggered.connect(self.hashfilemd2)
         self.ui.actionMD4.triggered.connect(self.hashfilemd4)
-        self.ui.actionRIPEMD.triggered.connect(self.hashfileripemd)
+        self.ui.actionRIPEMD_160.triggered.connect(self.hashfileripemd_160)
+        self.ui.actionRIPEMD_128.triggered.connect(self.hashfileripemd_128)
+        self.ui.actionWhirlpool.triggered.connect(self.hashfileWhirlpool)
+        self.ui.actionTiger.triggered.connect(self.hashfileTiger)
+        self.ui.actionAdler32.triggered.connect(self.hashfileAdler32)
+        self.ui.actionCRC24.triggered.connect(self.hashfileCrc24)
+        self.ui.actionCRC32.triggered.connect(self.hashfileCrc32)
+        self.ui.actionSHA_3_winner_Keccak_1600.triggered.connect(self.hashfileKeccak_1600)
+        self.ui.actionSHA_3_candidate_Skein_512.triggered.connect(self.hashfileSkein_512)
+        self.ui.actionGOST_34_11.triggered.connect(self.hashfileGOST_34_11)
 
     def encryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
@@ -182,7 +193,7 @@ class MasterForm(QMainWindow):
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("QPyCrypto-->Le fichier " + self.originalfile + " a été déchiffré.")
-            self.ui.plainTextEdit.appendPlainText(str("----->>>") + (self.afterfile))
+            self.ui.plainTextEdit.appendPlainText(str("----->>>") + self.afterfile)
 
     def tamponsign(self):
         texttosign = self.ui.plainTextEdit.toPlainText()
@@ -363,15 +374,37 @@ class MasterForm(QMainWindow):
                                 QMessageBox.Ok)
             return
 
-    def hashfileripemd(self):
+    def hashfileripemd_160(self):
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "RIPEMD: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcripemd(filename)
+            output = simplehash.get_file_checksum(filename, 'RIPEMD-160')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-            self.ui.plainTextEdit.appendPlainText("Hash RIPEMD -->" + filename)
+            self.ui.plainTextEdit.appendPlainText("Hash RIPEMD-160 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileripemd_128(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "RIPEMD: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)")
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'RIPEMD-128')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash RIPEMD-128 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfilemd2(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "MD4: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)")
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'MD2')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash MD2 -->" + filename)
             self.ui.plainTextEdit.appendPlainText(output)
 
     def hashfilemd4(self):
@@ -379,7 +412,7 @@ class MasterForm(QMainWindow):
                                                   "MD4: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcmd4(filename)
+            output = simplehash.get_file_checksum(filename, 'MD4')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash MD4 -->" + filename)
@@ -390,7 +423,7 @@ class MasterForm(QMainWindow):
                                                   "MD5: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcmd5(filename)
+            output = simplehash.get_file_checksum(filename, 'MD5')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash MD5 -->" + filename)
@@ -401,7 +434,7 @@ class MasterForm(QMainWindow):
                                                   "SHA512: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcsha512(filename)
+            output = simplehash.get_file_checksum(filename, 'SHA-512')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash SHA-512 -->" + filename)
@@ -412,7 +445,7 @@ class MasterForm(QMainWindow):
                                                   "SHA384: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcsha384(filename)
+            output = simplehash.get_file_checksum(filename, 'SHA-384')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash SHA-384 -->" + filename)
@@ -423,7 +456,7 @@ class MasterForm(QMainWindow):
                                                   "SHA256: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcsha256(filename)
+            output = simplehash.get_file_checksum(filename, 'SHA-256')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash SHA-256 -->" + filename)
@@ -434,7 +467,7 @@ class MasterForm(QMainWindow):
                                                   "SHA224: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
-            output = calcsha224(filename)
+            output = simplehash.get_file_checksum(filename, 'SHA-224')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash SHA-224 -->" + filename)
@@ -445,10 +478,98 @@ class MasterForm(QMainWindow):
                                                   "SHA-1: Select File.", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
-            output = calcsha(filename)
+            output = simplehash.get_file_checksum(filename, 'SHA-1')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
             self.ui.plainTextEdit.appendPlainText("Hash SHA-1 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileWhirlpool(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'Whirlpool')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash Whirlpool -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileTiger(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'Tiger')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash Tiger -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileAdler32(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'Adler32')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash Adler32 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileCrc24(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'CRC24')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash CRC24 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileCrc32(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'CRC32')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash CRC32 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileKeccak_1600(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'Keccak-1600')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash Keccak-1600 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileSkein_512(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'Skein-512')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash Skein-512 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText(output)
+
+    def hashfileGOST_34_11(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "SHA-1: Select File.", "",
+                                                  "All Files (*);;Text Files (*.txt)", )
+        if filename:
+            output = simplehash.get_file_checksum(filename, 'GOST-34.11')
+            self.ui.plainTextEdit.clear()
+            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
+            self.ui.plainTextEdit.appendPlainText("Hash GOST 34.11 -->" + filename)
             self.ui.plainTextEdit.appendPlainText(output)
 
     def decryptfile(self):

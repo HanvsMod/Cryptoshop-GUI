@@ -1,24 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*-coding:Utf-8 -*
 
-# QPyCrypto- gpg gui
-# Copyright(C) 2014 CORRAIRE Fabrice. antidote1911@gmail.com
+# Cryptoshop- gpg gui
+# Copyright(C) 2016 CORRAIRE Fabrice. antidote1911@gmail.com
 
-#############################################################################
-##This file is part of QPyCrypto.
-##
-##    QPyCrypto is free software: you can redistribute it and/or modify
+# ############################################################################
+# #This file is part of Cryptoshop.
+# #
+##    Cryptoshop is free software: you can redistribute it and/or modify
 ##    it under the terms of the GNU General Public License as published by
 ##    the Free Software Foundation, either version 3 of the License, or
 ##    (at your option) any later version.
 ##
-##    QPyCrypto is distributed in the hope that it will be useful,
+##    Cryptoshop is distributed in the hope that it will be useful,
 ##    but WITHOUT ANY WARRANTY; without even the implied warranty of
 ##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##    GNU General Public License for more details.
 ##
 ##    You should have received a copy of the GNU General Public License
-##    along with QPyCrypto.  If not, see <http://www.gnu.org/licenses/>.
+##    along with Cryptoshop.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
 
 from PyQt5.QtWidgets import (QApplication, QDialog)

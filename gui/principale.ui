@@ -11,15 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QPyCrypto</string>
+   <string>Cryptoshop</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPlainTextEdit" name="plainTextEdit">
       <property name="plainText">
-       <string>Choose a file to encrypt with menu file/encrypt, or enter text here. And click &quot;Encrypt&quot;.
-Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici puis cliquez sur chiffrer.</string>
+       <string>Welcome to Cryptoshop.
+</string>
       </property>
       <property name="backgroundVisible">
        <bool>false</bool>
@@ -119,6 +119,7 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
      <string>About</string>
     </property>
     <addaction name="actionInfos_QPyCrypto"/>
+    <addaction name="actionAbout_Botan"/>
     <addaction name="actionAbout_GNUPG"/>
     <addaction name="actionInfos_Qt"/>
    </widget>
@@ -161,7 +162,7 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
    </widget>
    <widget class="QMenu" name="menuEnigma">
     <property name="title">
-     <string>Enigma</string>
+     <string>File</string>
     </property>
     <addaction name="actionChiffrer_un_fichier_Enigma"/>
     <addaction name="actionD_chiffrer_un_fichier_Enigma"/>
@@ -169,17 +170,50 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
    </widget>
    <widget class="QMenu" name="menuHash">
     <property name="title">
-     <string>Hash (not implemented)</string>
+     <string>Hash</string>
     </property>
-    <addaction name="actionRIPEMD"/>
-    <addaction name="actionSHA"/>
-    <addaction name="actionSHA224"/>
-    <addaction name="actionSHA256"/>
-    <addaction name="actionSHA384"/>
-    <addaction name="actionSHA512"/>
-    <addaction name="actionMD2"/>
-    <addaction name="actionMD4"/>
-    <addaction name="actionMD5"/>
+    <widget class="QMenu" name="menuSHA_3">
+     <property name="title">
+      <string>SHA-3</string>
+     </property>
+     <addaction name="actionSHA_3_winner_Keccak_1600"/>
+     <addaction name="actionSHA_3_candidate_Skein_512"/>
+    </widget>
+    <widget class="QMenu" name="menuSHA">
+     <property name="title">
+      <string>SHA-2</string>
+     </property>
+     <addaction name="actionSHA224"/>
+     <addaction name="actionSHA256"/>
+     <addaction name="actionSHA384"/>
+     <addaction name="actionSHA512"/>
+    </widget>
+    <widget class="QMenu" name="menuObsoletes">
+     <property name="title">
+      <string>Obsoletes</string>
+     </property>
+     <addaction name="actionMD5_2"/>
+     <addaction name="actionMD4"/>
+     <addaction name="actionMD2"/>
+     <addaction name="actionRIPEMD_128"/>
+    </widget>
+    <widget class="QMenu" name="menuChecksums">
+     <property name="title">
+      <string>Checksums</string>
+     </property>
+     <addaction name="actionAdler32"/>
+     <addaction name="actionCRC24"/>
+     <addaction name="actionCRC32"/>
+    </widget>
+    <addaction name="actionSHA_1"/>
+    <addaction name="menuSHA"/>
+    <addaction name="menuSHA_3"/>
+    <addaction name="actionWhirlpool"/>
+    <addaction name="actionGOST_34_11"/>
+    <addaction name="actionTiger"/>
+    <addaction name="actionRIPEMD_160"/>
+    <addaction name="menuChecksums"/>
+    <addaction name="menuObsoletes"/>
    </widget>
    <addaction name="menuEnigma"/>
    <addaction name="menuFichier"/>
@@ -190,7 +224,7 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
   </widget>
   <action name="actionInfos_QPyCrypto">
    <property name="text">
-    <string>About QPyCrypto</string>
+    <string>About Cryptoshop</string>
    </property>
   </action>
   <action name="actionInfos_Qt">
@@ -235,11 +269,6 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
     <string>Decrypt file (GnuPG)</string>
    </property>
   </action>
-  <action name="actionRIPEMD">
-   <property name="text">
-    <string>RIPEMD</string>
-   </property>
-  </action>
   <action name="actionMD2">
    <property name="text">
     <string>MD2</string>
@@ -275,19 +304,14 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
     <string>SHA512</string>
    </property>
   </action>
-  <action name="actionSHA">
-   <property name="text">
-    <string>SHA</string>
-   </property>
-  </action>
   <action name="actionChiffrer_OpenPGP">
    <property name="text">
-    <string>Encrypt Editor</string>
+    <string>Encrypt Editor (not implented)</string>
    </property>
   </action>
   <action name="actionDechiffrer_OpenPGP">
    <property name="text">
-    <string>Decrypt Editor</string>
+    <string>Decrypt Editor (not implanted)</string>
    </property>
   </action>
   <action name="actionOuvrir">
@@ -372,12 +396,12 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
   </action>
   <action name="actionChiffrer_un_fichier_Enigma">
    <property name="text">
-    <string>Encrypt File (QPyCrypto)</string>
+    <string>Encrypt File (Serpent CTR 256)</string>
    </property>
   </action>
   <action name="actionD_chiffrer_un_fichier_Enigma">
    <property name="text">
-    <string>Decrypt file (QPyCrypto)</string>
+    <string>Decrypt file (Serpent EAX 256)</string>
    </property>
   </action>
   <action name="actionImporter_une_cl_e">
@@ -403,6 +427,91 @@ Choisissez un fichier à chiffrer à l'aide du menu, Ou entrez votre texte ici p
   <action name="actionD_chiffrer_un_fichier_Enigma_Test">
    <property name="text">
     <string>Déchiffrer un fichier (Enigma Test)</string>
+   </property>
+  </action>
+  <action name="actionSHA_3_winner_Keccak_1600">
+   <property name="text">
+    <string>SHA-3 winner Keccak-1600</string>
+   </property>
+  </action>
+  <action name="actionSHA_3_candidate_Skein_512">
+   <property name="text">
+    <string>SHA-3 candidate Skein-512</string>
+   </property>
+  </action>
+  <action name="actionMD5_2">
+   <property name="text">
+    <string>MD5</string>
+   </property>
+  </action>
+  <action name="actionAdler32">
+   <property name="text">
+    <string>Adler32</string>
+   </property>
+  </action>
+  <action name="actionCRC24">
+   <property name="text">
+    <string>CRC24</string>
+   </property>
+  </action>
+  <action name="actionCRC32">
+   <property name="text">
+    <string>CRC32</string>
+   </property>
+  </action>
+  <action name="actionCBC_MAC">
+   <property name="text">
+    <string>CBC-MAC</string>
+   </property>
+  </action>
+  <action name="actionX9_19_DES_MAC">
+   <property name="text">
+    <string>X9.19 DES-MAC</string>
+   </property>
+  </action>
+  <action name="actionHAS_160">
+   <property name="text">
+    <string>HAS-160</string>
+   </property>
+  </action>
+  <action name="actionRIPEMD_128">
+   <property name="text">
+    <string>RIPEMD-128</string>
+   </property>
+  </action>
+  <action name="actionRIPEMD_129">
+   <property name="text">
+    <string>RIPEMD-128</string>
+   </property>
+  </action>
+  <action name="actionRIPEMD_160">
+   <property name="text">
+    <string>RIPEMD-160</string>
+   </property>
+  </action>
+  <action name="actionSHA_1">
+   <property name="text">
+    <string>SHA-1</string>
+   </property>
+  </action>
+  <action name="actionTiger">
+   <property name="text">
+    <string>Tiger</string>
+   </property>
+  </action>
+  <action name="actionWhirlpool">
+   <property name="text">
+    <string>Whirlpool</string>
+   </property>
+  </action>
+  <action name="actionGOST_34_11">
+   <property name="text">
+    <string>GOST 34.11</string>
+   </property>
+  </action>
+  <action name="actionAbout_Botan">
+   <property name="text">
+    <string>About Botan</string>
    </property>
   </action>
  </widget>

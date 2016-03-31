@@ -1,29 +1,33 @@
-QPyCrypto
+Cryptoshop
 =========
 **(C)2016 @ CORRAIRE Fabrice**
 antidote1911@gmail.com
 
-QPyCrypto is a graphical user interface for "GnuPG" and a gui for
-encrypt files with AES-256 in CTR mode. See for more infos:
+Cryptoshop is a graphical user interface for "GnuPG" and a gui for some
+crypto tools. (hash functions, encrypt in multiples strong formats).
 
-http://www.daemonology.net/blog/2009-06-11-cryptographic-right-answers.html
+I am not an expert on crypto
+I am not an expert with Python
+I am not an expert in English
 
-!!! QPyCrypto is not finished !!!
-need threading, bug corrections, move to Botan Python binding because Botan is the best ! :)
+DO NOT USE IN PRODUCTION
+
+Cryptoshop is not finished.
+Need threading (but I don't understand how to make that lol), bug corrections, move to Botan Python binding because Botan is the best ! :)
 
 http://botan.randombit.net/manual/python.html
 
-
-QPyCrypto is under GPL License.
+Cryptoshop is under GPL License.
 See LICENSE text file for information's.
 
-QPyCrypto use python 3 and Qt5 (PyQt5).
+Cryptoshop use python 3 and Qt5 (PyQt5).
 
 Requirement:
 GnuPG
 Python >= 3
 
 Python modules:
+----------------
 PyQT 5
 Python-gnupg
 PyCrypto

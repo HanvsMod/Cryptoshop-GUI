@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'infos.ui'
 #
-# Created: Tue Mar 25 13:19:50 2014
-#      by: PyQt5 UI code generator 5.2.1
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -47,23 +46,13 @@ class Ui_About(object):
 
     def retranslateUi(self, About):
         _translate = QtCore.QCoreApplication.translate
-        About.setWindowTitle(_translate("About", "About QPyCrypto"))
-        self.label.setText(_translate("About", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600; text-decoration: underline; color:#550000;\">QPyCrypto 1.0</span></p></body></html>"))
-        self.label_2.setText(_translate("About", "Python/Qt GUI for GPG."))
+        About.setWindowTitle(_translate("About", "About Cryptoshop"))
+        self.label.setText(_translate("About", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600; text-decoration: underline; color:#550000;\">Cryptoshop 1.0</span></p></body></html>"))
+        self.label_2.setText(_translate("About", "Python/Qt GUI for GPG and crypto tools"))
         self.textBrowser.setHtml(_translate("About", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600; text-decoration: underline; color:#e23033;\">Copyrights (C) 2014 @ CORRAIRE Fabrice</span></p>\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://www.testgffg.com\"><span style=\" text-decoration: underline; color:#000000;\">Contact: </span></a><a href=\"antidote1911@gmail.com\"><span style=\" text-decoration: underline; color:#0057ae;\">antidote1911@gmail.com<br /><br /><br /></span></a></p></body></html>"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    About = QtWidgets.QDialog()
-    ui = Ui_About()
-    ui.setupUi(About)
-    About.show()
-    sys.exit(app.exec_())
+"</style></head><body style=\" font-family:\'Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:12pt; font-weight:600; text-decoration: underline; color:#e23033;\">Copyrights (C) 2016 @ CORRAIRE Fabrice</span></p>\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://www.testgffg.com\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt; text-decoration: underline; color:#000000;\">Contact: </span></a><a href=\"antidote1911@gmail.com\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt; text-decoration: underline; color:#0057ae;\">antidote1911@gmail.com<br /><br /><br /></span></a></p></body></html>"))
 
