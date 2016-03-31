@@ -396,12 +396,12 @@
   </action>
   <action name="actionChiffrer_un_fichier_Enigma">
    <property name="text">
-    <string>Encrypt File (Serpent CTR 256)</string>
+    <string>Encrypt File</string>
    </property>
   </action>
   <action name="actionD_chiffrer_un_fichier_Enigma">
    <property name="text">
-    <string>Decrypt file (Serpent EAX 256)</string>
+    <string>Decrypt file</string>
    </property>
   </action>
   <action name="actionImporter_une_cl_e">
