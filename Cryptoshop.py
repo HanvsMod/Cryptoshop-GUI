@@ -30,11 +30,10 @@ from fenselectsignkey import Fenselectsignkey
 from fensymetrickey import Fenselectkey
 from feninfos import About
 from keymanager import Fenmanager
-from hashFiles import *
 import gnupg
 import os
 import Crypto_gpg
-import simplecrypt2
+#import simplecrypt2
 import simplehash
 import botancrypt
 
