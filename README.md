@@ -1,6 +1,6 @@
 Cryptoshop
 =========
-**(C)2016 @ CORRAIRE Fabrice**
+***(C)2016 @ CORRAIRE Fabrice***
 antidote1911@gmail.com
 
 Description
@@ -23,7 +23,7 @@ Screenshots
 -------------
 ![](http://img15.hostingpics.net/pics/980644mainwindow.png)
 
-More on the screenshots folder.
+More on the *screenshots* folder.
 
 License
 --------
@@ -36,7 +36,7 @@ Requirement
 -------------
 - Python >= 3
 - Qt 5
-- GnuPG on Linux distribution or gpg4win for Windows )
+- GnuPG on Linux distribution or gpg4win on Windows )
 
 Python modules:
 ----------------
