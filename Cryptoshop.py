@@ -25,7 +25,7 @@ from PyQt5.QtWidgets import QMainWindow, QDialog, QApplication, QFileDialog, QLi
     QProgressDialog
 from PyQt5.QtCore import Qt, QFile, QTextStream
 from gui.ui_principale import Ui_MainWindow
-from fenselectkey import Fenselectkey
+from fenselectkey import Fenselectkeygpg
 from fenselectsignkey import Fenselectsignkey
 from fensymetrickey import Fenselectkey
 from feninfos import About
@@ -109,7 +109,7 @@ class MasterForm(QMainWindow):
     def encryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "Sélectionnez le fichier à chiffrer", "",
-                                                  "All Files (*);;Text Files (*.txt)")
+                                                  "All Files (*)")
         if filename:
             dialog = Fenselectkey(self)
             if dialog.exec_() == QDialog.Accepted:
@@ -122,7 +122,7 @@ class MasterForm(QMainWindow):
     def decryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "Sélectionnez le fichier à chiffrer", "",
-                                                  "All Files (*);;Text Files (*.txt)")
+                                                  "Cryptobox Files (*.cryptobox);;All Files (*)")
 
         if filename:
             m_key, ok = QInputDialog.getText(self, "Entrez votre passphrase",
@@ -240,7 +240,7 @@ class MasterForm(QMainWindow):
 
         if filename:
 
-            dialog = Fenselectkey(self)
+            dialog = Fenselectkeygpg(self)
 
             if dialog.exec_() == QDialog.Accepted:
                 m_key = dialog.ui.editKey.text().strip()

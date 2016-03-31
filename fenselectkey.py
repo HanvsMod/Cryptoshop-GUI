@@ -26,10 +26,10 @@ from gui.ui_selectkey import Ui_Selectkey
 import gnupg
 
 
-class Fenselectkey(QDialog):
+class Fenselectkeygpg(QDialog):
     def __init__(self, parent=None):
 
-        super(Fenselectkey, self).__init__(parent)
+        super(Fenselectkeygpg, self).__init__(parent)
         self.ui = Ui_Selectkey()
         self.ui.setupUi(self)
         self.ui.editKey.hide()
@@ -71,6 +71,6 @@ if __name__ == '__main__':
     import sys
 
     app = QApplication(sys.argv)
-    fen = Fenselectkey()
+    fen = Fenselectkeygpg()
     fen.show()
     sys.exit(app.exec_())
