@@ -22,6 +22,7 @@
 #############################################################################
 
 import botan
+import os
 
 iterations = 1000000
 version = "Cryptoshop 1.0 "
@@ -89,7 +90,7 @@ def encrypt(filename, passphrase, algo):
     hmac.update(iv)
     test = hmac.final()
 
-    with open(filename + ".enc", 'wb') as fo:
+    with open(filename + ".cryptoshop", 'wb') as fo:
         fo.write(str.encode(header))
         fo.write(test)  # hmac 32 bits
         fo.write(iv)  # vi 10 bits
@@ -157,7 +158,8 @@ def decrypt(filename, m_key):
         decryptor.set_key(h2)
         decryptor.start(iv)
         decrypted = decryptor.finish(cipher)
-        with open(filename + ".decrypted", 'wb') as fo2:
+        outname = os.path.splitext(filename)[0].split("_")[-1]
+        with open(str(outname), 'wb') as fo2:
             fo2.write(decrypted)
             fo2.close()
         return "Successfully Decrypted"
