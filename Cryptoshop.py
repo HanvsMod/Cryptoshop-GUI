@@ -27,6 +27,7 @@ from PyQt5.QtCore import Qt, QFile, QTextStream
 from gui.ui_principale import Ui_MainWindow
 from fenselectkey import Fenselectkey
 from fenselectsignkey import Fenselectsignkey
+from fensymetrickey import Fenselectkey
 from feninfos import About
 from keymanager import Fenmanager
 from hashFiles import *
@@ -35,6 +36,7 @@ import os
 import Crypto_gpg
 import simplecrypt2
 import simplehash
+import botancrypt
 
 
 def keymanager():
@@ -109,15 +111,14 @@ class MasterForm(QMainWindow):
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "Sélectionnez le fichier à chiffrer", "",
                                                   "All Files (*);;Text Files (*.txt)")
-
         if filename:
-            m_key, ok = QInputDialog.getText(self, "Entrez votre passphrase",
-                                             "Clée:", QLineEdit.Normal)
-            if ok and m_key != '':
-                f = open(filename, "rb")
-                enc = simplecrypt2.encrypt_file(m_key, f)
-                with open(filename + ".enc", 'wb') as fo:
-                    fo.write(enc.read())
+            dialog = Fenselectkey(self)
+            if dialog.exec_() == QDialog.Accepted:
+                m_key = dialog.ui.EditPass.text()
+                algo = dialog.ui.comboAlgo.currentText()
+                enc = botancrypt.encrypt(filename, m_key, algo)
+                self.ui.statusbar.showMessage("File " + filename + " is encrypted.", 50000)
+                return
 
     def decryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
@@ -129,10 +130,18 @@ class MasterForm(QMainWindow):
                                              "Clée:", QLineEdit.Normal)
             if ok and m_key != '':
                 try:
-                    f = open(filename, "rb")
-                    enc = simplecrypt2.decrypt_file(m_key, f)
-                    with open(filename[:-4], 'wb') as fo:
-                        fo.write(enc.read())
+                    enc = botancrypt.decrypt(filename, m_key)
+                    print(enc)
+                    if enc == "Invalid Header":
+                        QMessageBox.warning(self, "Invalid Header",
+                                            "This file have an invalid or missing header. This is not a Cryptoshop file.",
+                                            QMessageBox.Ok)
+                    if enc == "Invalid Hmac verification":
+                        QMessageBox.warning(self, "Error",
+                                            "Wrong Passphrase, or invalid authentification code (modified file)",
+                                            QMessageBox.Ok)
+                    if enc == "Successfully Decrypted":
+                        self.ui.statusbar.showMessage("File " + filename + " is decrypted.", 50000)
                 except Exception as e:
                     QMessageBox.warning(self, "What that bug ??", (str(e)), QMessageBox.Ok)
 
