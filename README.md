@@ -37,10 +37,10 @@ Requirement
 - Python >= 3
 - Qt 5
 - GnuPG on Linux distribution or gpg4win on Windows )
+- Botan
 
 Python modules:
 ----------------
-PyQT 5
-Python-gnupg
-PyCrypto
-Botan
+- PyQT5
+- Python-gnupg
+- PyCrypto
