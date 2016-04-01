@@ -208,7 +208,7 @@ class MasterForm(QMainWindow):
                                 QMessageBox.Ok)
             return
         if verified_data.valid is True:
-            QMessageBox.information(self, "Signature Valide",
+            QMessageBox.information(self, "Good Signature",
                                     "Good signature from:  " + verified_data.username +
                                     "\nID " + verified_data.key_id + "\n\nFingerprint: \n"
                                     + verified_data.fingerprint + "\n\nGnuPG Message:\n" + verified_data.stderr,
@@ -220,18 +220,14 @@ class MasterForm(QMainWindow):
 
     def updatePixmap(self, boll):
         if boll == "False":
-            QMessageBox.warning(self, "Déchiffrage de impossible",
-                                " La passphrase est invalide pour déchiffrer " + self.originalfile,
+            QMessageBox.warning(self, "Error",
+                                " Wrong passphrase " + self.originalfile,
                                 QMessageBox.Ok)
-            self.ui.plainTextEdit.clear()
-            self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-            self.ui.plainTextEdit.appendPlainText(
-                "QPyCrypto-->Impossible de déchiffrer le fichier " + self.originalfile)
-            self.ui.plainTextEdit.appendPlainText(str("Passphrase Invalide"))
+            return
         else:
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-            self.ui.plainTextEdit.appendPlainText("QPyCrypto-->Le fichier " + self.originalfile + " a été déchiffré.")
+            self.ui.plainTextEdit.appendPlainText("Cryptoshop-->The file " + self.originalfile + " is decrypted")
             self.ui.plainTextEdit.appendPlainText(str("----->>>") + self.afterfile)
 
     def tamponsign(self):
@@ -293,10 +289,9 @@ class MasterForm(QMainWindow):
 
                     self.myLongTask.start()
 
-                    self.ui.plainTextEdit.clear()
-                    self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-                    self.ui.plainTextEdit.appendPlainText("Cryptoshop-->The file is encrypted.")
-                    self.ui.plainTextEdit.appendPlainText(str(filename + ".gpg"))
+                    QMessageBox.warning(self, "The file is encrypted",
+                                        filename + ".gpg",
+                                        QMessageBox.Ok)
 
                 else:
                     sym = False
