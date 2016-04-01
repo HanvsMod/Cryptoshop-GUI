@@ -197,14 +197,6 @@ class MasterForm(QMainWindow):
         gpg = gnupg.GPG(use_agent=False)
         gpg.encoding = 'utf-8'
         verified_data = gpg.verify(texttoverify)
-        # print("fingerprint "+verified_data.fingerprint)
-        # print("creation_date "+verified_data.creation_date)
-        # print("status "+verified_data.status)
-        # print("expire_timestamp "+verified_data.expire_timestamp)
-        # print("key_id "+verified_data.key_id)
-        # print("stderr "+verified_data.stderr)
-        # print("trust_text "+verified_data.trust_text)
-        # print("username "+verified_data.username)
         if verified_data.valid is False and verified_data.status is None:
             QMessageBox.warning(self, "No valid signature",
                                 "No valid signature.",
