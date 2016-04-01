@@ -152,13 +152,15 @@ class MasterForm(QMainWindow):
                                                   "All files (*)")
         if filename:
             gpg = gnupg.GPG(use_agent=False)
+            #gpg.encoding = 'utf-8'
             dialog = Fenselectsignkey(self)
             if dialog.exec_() == QDialog.Accepted:
                 keyid = dialog.ui.comboBox.currentText()
                 key = dialog.ui.editKey.text()
-                with open(filename, 'rb') as signfile:
-                    gpg.sign_file(signfile, keyid, key, clearsign=True, detach=True, output=(filename + ".sig"))
-                    signfile.close()
+                with open(filename, 'rb') as data:
+                    signed_data = gpg.sign_file(file=data, keyid=keyid, output=filename + ".sig", detach=True)
+                    print(signed_data)
+                    data.close()
 
     def verifysignfile(self):
         filename, _ = QFileDialog.getOpenFileName(self,
@@ -167,19 +169,15 @@ class MasterForm(QMainWindow):
         if filename:
             with open(filename, 'rb') as stream:
                 gpg = gnupg.GPG(use_agent=False)
+                #gpg.encoding = 'utf-8'
                 data = os.path.splitext(filename)[0].split("_")[-1]
                 verified = gpg.verify_file(stream, data)
-                print(verified.trust_text)
-                print(verified.TRUST_FULLY)
-                print(verified.trust_level)
-                print(verified.status)
-                print(verified.username)
-                if verified.trust_level is not None and verified.trust_level >= verified.TRUST_FULLY:
-                    print('Trust level: %s' % verified.trust_text)
-                elif verified.trust_level is not None and verified.trust_level >= 0:
-                    QMessageBox.warning(self, "Invalid", ("Signature can not be verified" ), QMessageBox.Ok)
-                else:
-                    QMessageBox.warning(self, verified.status, (verified.stderr), QMessageBox.Ok)
+                stream.close()
+
+            if verified.trust_level is not None and verified.trust_level >= verified.TRUST_FULLY:
+                print('Trust level: %s' % verified.trust_text)
+            else:
+                QMessageBox.warning(self, verified.status, (verified.stderr), QMessageBox.Ok)
 
     def tamponverify(self):
         texttoverify = self.ui.plainTextEdit.toPlainText()
