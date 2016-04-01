@@ -119,8 +119,6 @@
      <string>About</string>
     </property>
     <addaction name="actionInfos_QPyCrypto"/>
-    <addaction name="actionAbout_Botan"/>
-    <addaction name="actionAbout_GNUPG"/>
     <addaction name="actionInfos_Qt"/>
    </widget>
    <widget class="QMenu" name="menuFichier">

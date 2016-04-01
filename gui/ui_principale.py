@@ -209,8 +209,6 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionColler)
         self.toolBar.addSeparator()
         self.menuInfos.addAction(self.actionInfos_QPyCrypto)
-        self.menuInfos.addAction(self.actionAbout_Botan)
-        self.menuInfos.addAction(self.actionAbout_GNUPG)
         self.menuInfos.addAction(self.actionInfos_Qt)
         self.menuFichier.addSeparator()
         self.menuFichier.addAction(self.actionChiffrerfichier)
