@@ -152,7 +152,7 @@ class MasterForm(QMainWindow):
                                                   "All files (*)")
         if filename:
             gpg = gnupg.GPG(use_agent=False)
-            #gpg.encoding = 'utf-8'
+            gpg.encoding = 'utf-8'
             dialog = Fenselectsignkey(self)
             if dialog.exec_() == QDialog.Accepted:
                 keyid = dialog.ui.comboBox.currentText()
@@ -169,19 +169,33 @@ class MasterForm(QMainWindow):
         if filename:
             with open(filename, 'rb') as stream:
                 gpg = gnupg.GPG(use_agent=False)
-                #gpg.encoding = 'utf-8'
+                gpg.encoding = 'utf-8'
                 data = os.path.splitext(filename)[0].split("_")[-1]
                 verified = gpg.verify_file(stream, data)
                 stream.close()
 
-            if verified.trust_level is not None and verified.trust_level >= verified.TRUST_FULLY:
-                print('Trust level: %s' % verified.trust_text)
+            if verified.valid is True:
+                QMessageBox.information(self, "Good Signature",
+                                        "Good signature from:  " + verified.username +
+                                        "\n\nFingerprint:  " + verified.fingerprint +
+                                        "\nKey Id:  " + verified.key_id +
+                                        "\nThe signature was created at " + verified.creation_date + "\n\nTrust  :" + verified.trust_text,
+                                        QMessageBox.Ok)
+                return
+            if verified.valid is False and verified.username is None:
+                QMessageBox.warning(self, "No signature found",
+                                    "No signature found:  " + verified.stderr, QMessageBox.Ok)
+                return
             else:
-                QMessageBox.warning(self, verified.status, (verified.stderr), QMessageBox.Ok)
+                QMessageBox.warning(self, "Bad Signature",
+                                    "Bad signature from:  " + verified.username +
+                                    "\nKey Id:  " + verified.key_id + "\n\nTHE FILE IS CORRUPTED." + "\n\nDetails  :\n" + verified.stderr,
+                                    QMessageBox.Ok)
 
     def tamponverify(self):
         texttoverify = self.ui.plainTextEdit.toPlainText()
         gpg = gnupg.GPG(use_agent=False)
+        gpg.encoding = 'utf-8'
         verified_data = gpg.verify(texttoverify)
         # print("fingerprint "+verified_data.fingerprint)
         # print("creation_date "+verified_data.creation_date)
@@ -193,21 +207,24 @@ class MasterForm(QMainWindow):
         # print("username "+verified_data.username)
         if verified_data.valid is False and verified_data.status is None:
             QMessageBox.warning(self, "No valid signature",
-                                "Le texte ne comporte aucune signature valide.",
+                                "No valid signature.",
                                 QMessageBox.Ok)
             return
         if verified_data.valid is False:
-            QMessageBox.warning(self, "Signature Invalide",
-                                "La signature de " + verified_data.username +
-                                "\nID " + verified_data.key_id +
-                                " est INVALIDE." + "\n\nGPG Message:\n" + verified_data.stderr,
+            QMessageBox.warning(self, "Bad Signature",
+                                "BAD SIGNATURE " +"\nDATA ARE CORRUPTED:\n\n" + "GnuPG Message: \n"+verified_data.stderr,
                                 QMessageBox.Ok)
+            return
         if verified_data.valid is True:
             QMessageBox.information(self, "Signature Valide",
-                                    "Signature correcte de " + verified_data.username +
-                                    "\nID " + verified_data.key_id + "\n\nEmpreinte:\n"
-                                    + verified_data.fingerprint + "\n\nGPG Message:\n" + verified_data.stderr,
+                                    "Good signature from:  " + verified_data.username +
+                                    "\nID " + verified_data.key_id + "\n\nFingerprint: \n"
+                                    + verified_data.fingerprint + "\n\nGnuPG Message:\n" + verified_data.stderr,
                                     QMessageBox.Ok)
+        else:
+            QMessageBox.warning(self, "Error",
+                                " Error ",
+                                QMessageBox.Ok)
 
     def updatePixmap(self, boll):
         if boll == "False":
@@ -234,7 +251,7 @@ class MasterForm(QMainWindow):
             signed_data = gpg.sign(texttosign, keyid=key)
             if str(signed_data) == "":
                 QMessageBox.critical(self, 'Echec Signature...',
-                                     '''La passphrase entrée n'est pas valide pour déverrouiller cette clée.''',
+                                     '''The passphrase is invalid for this key.''',
                                      QMessageBox.Ok)
                 return
             self.ui.plainTextEdit.clear()
@@ -257,8 +274,8 @@ class MasterForm(QMainWindow):
 
     def encryptfile(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "Selectionez le fichier à chiffrer", "",
-                                                  "Tous (*);;Fichiers texte (*.txt)")
+                                                  "Select file to encrypt", "",
+                                                  "All (*)")
 
         if filename:
 
@@ -269,8 +286,8 @@ class MasterForm(QMainWindow):
 
                 if dialog.ui.checkSymetric.isChecked():
                     if dialog.ui.editKey.text() == "":
-                        QMessageBox.warning(self, 'Erreur...',
-                                            '''Vous devez tapez une passphrase secrette pour chiffrer un fichier.''',
+                        QMessageBox.warning(self, 'Error...',
+                                            '''You must type a passphrase.''',
                                             QMessageBox.Ok)
                         return
                     encryordecry = True
@@ -286,7 +303,7 @@ class MasterForm(QMainWindow):
 
                     self.ui.plainTextEdit.clear()
                     self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-                    self.ui.plainTextEdit.appendPlainText("QPyCrypto-->Le fichier a été chiffré.")
+                    self.ui.plainTextEdit.appendPlainText("Cryptoshop-->The file is encrypted.")
                     self.ui.plainTextEdit.appendPlainText(str(filename + ".gpg"))
 
                 else:
@@ -315,21 +332,21 @@ class MasterForm(QMainWindow):
 
                     self.ui.plainTextEdit.clear()
                     self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-                    self.ui.plainTextEdit.appendPlainText("QPyCrypto-->Le fichier a été chiffré.")
+                    self.ui.plainTextEdit.appendPlainText("Cryptoshop-->The file is encrypted.")
                     self.ui.plainTextEdit.appendPlainText(str(filename + ".gpg"))
 
     def aboutqt(self):
         QMessageBox.aboutQt(self, 'Qt is the best !')
 
     def tamponencrypt(self):
-        dialog = Fenselectkey(self)
+        dialog = Fenselectkeygpg(self)
 
         if dialog.exec_() == QDialog.Accepted:
             self.m_key = dialog.ui.editKey.text().strip()
             if dialog.ui.checkSymetric.isChecked():
                 if dialog.ui.editKey.text() == "":
-                    QMessageBox.warning(self, 'Erreur',
-                                        '''Vous devez tapez une passphrase secrette pour chiffrer.''',
+                    QMessageBox.warning(self, 'Error',
+                                        '''You must type a passphrase.''',
                                         QMessageBox.Ok)
                     return
 
@@ -368,20 +385,20 @@ class MasterForm(QMainWindow):
             file = QFile(filename)
             if not file.open(QFile.WriteOnly | QFile.Text):
                 QMessageBox.warning(self, "Save",
-                                    "Ecriture impossible %s:\n%s." % (filename, file.errorString()))
+                                    "Writing Error %s:\n%s." % (filename, file.errorString()))
                 return
             outstr = QTextStream(file)
             outstr << self.ui.plainTextEdit.toPlainText()
-            QMessageBox.information(self, "Sauver fichier",
-                                    "Le fichier à été chiffré. \n%s" % (file.fileName()))
+            QMessageBox.information(self, "Save file",
+                                    "The file is saved. \n%s" % (file.fileName()))
 
     def ouvrirtexte(self):
         filename, _ = QFileDialog.getOpenFileName(self)
         if filename:
             file = QFile(filename)
             if not file.open(QFile.ReadOnly | QFile.Text):
-                QMessageBox.warning(self, "Ouvrir fichier",
-                                    "Lecture impossible %s:\n%s." % (filename, file.errorString()))
+                QMessageBox.warning(self, "Open File",
+                                    "Reading Error %s:\n%s." % (filename, file.errorString()))
                 return
             instr = QTextStream(file)
             self.ui.plainTextEdit.setPlainText(instr.readAll())
@@ -399,8 +416,8 @@ class MasterForm(QMainWindow):
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText(str(decrypted_data))
         else:
-            QMessageBox.warning(self, "Déchiffrage impossible",
-                                ''' La passphrase est invalide''',
+            QMessageBox.warning(self, "Invalid passphrase",
+                                ''' Invalid passphrase.''',
                                 QMessageBox.Ok)
             return
 
@@ -607,8 +624,8 @@ class MasterForm(QMainWindow):
                                                   "Select encrypted file", "",
                                                   "GPG files (*.gpg);;Tous (*)")
         if filename:
-            m_key, ok = QInputDialog.getText(self, "Entrez votre passphrase",
-                                             "Clée:", QLineEdit.Normal)
+            m_key, ok = QInputDialog.getText(self, "Enter your passphrase",
+                                             "Key:", QLineEdit.Normal)
             if ok and m_key != '':
                 lname = os.path.splitext(filename)[0].split("_")[-1]
 
@@ -623,13 +640,13 @@ class MasterForm(QMainWindow):
                 self.myLongTask.start()
 
             else:
-                QMessageBox.warning(self, 'Erreur',
-                                    ''' Vous devez choisir une passphrase ''',
+                QMessageBox.warning(self, 'Error',
+                                    ''' You must enter a passphrase ''',
                                     QMessageBox.Ok)
 
     def isstarted(self, status):
         if status == "True":
-            self.progress = QProgressDialog("Calculs en cours...", "Annuler", 0, 0)
+            self.progress = QProgressDialog("Work in progress...", "Cancel", 0, 0)
             self.progress.setWindowModality(Qt.ApplicationModal)
             self.progress.exec()
         else:
