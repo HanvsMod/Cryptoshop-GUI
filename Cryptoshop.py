@@ -176,7 +176,7 @@ class MasterForm(QMainWindow):
                 print(verified.username)
                 if verified.trust_level is not None and verified.trust_level >= verified.TRUST_FULLY:
                     print('Trust level: %s' % verified.trust_text)
-                if not verified:
+                elif verified.trust_level is not None and verified.trust_level >= 0:
                     QMessageBox.warning(self, "Invalid", ("Signature can not be verified" ), QMessageBox.Ok)
                 else:
                     QMessageBox.warning(self, verified.status, (verified.stderr), QMessageBox.Ok)
