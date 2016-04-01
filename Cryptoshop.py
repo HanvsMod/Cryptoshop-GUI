@@ -140,17 +140,17 @@ class MasterForm(QMainWindow):
                     enc = botancrypt.decrypt(filename, m_key)
                     print(enc)
                     if enc == "Invalid Header":
-                        QMessageBox.warning(self, "Invalid Header",
+                        QMessageBox.warning(self, appname+version+"Invalid Header",
                                             "This file have an invalid or missing header. This is not a Cryptoshop file.",
                                             QMessageBox.Ok)
                     if enc == "Invalid Hmac verification":
-                        QMessageBox.warning(self, "Error",
+                        QMessageBox.warning(self, appname+version+"Error",
                                             "Wrong Passphrase, or invalid authentification code (modified file)",
                                             QMessageBox.Ok)
                     if enc == "Successfully Decrypted":
                         self.ui.statusbar.showMessage("File " + filename + " is decrypted.", 50000)
                 except Exception as e:
-                    QMessageBox.warning(self, "What that bug ??", (str(e)), QMessageBox.Ok)
+                    QMessageBox.warning(self, appname+version+"What that bug ??", (str(e)), QMessageBox.Ok)
 
     def signfile(self):
         filename, _ = QFileDialog.getOpenFileName(self,
@@ -171,7 +171,7 @@ class MasterForm(QMainWindow):
     def verifysignfile(self):
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "Select the sig file", "",
-                                                  "sign Files (*.sig);;All Files (*)")
+                                                  "sig Files (*.sig);;asc Files (*.asc);;All Files (*)")
         if filename:
             with open(filename, 'rb') as stream:
                 gpg = gnupg.GPG(use_agent=False)
@@ -181,7 +181,7 @@ class MasterForm(QMainWindow):
                 stream.close()
 
             if verified.valid is True:
-                QMessageBox.information(self, "Good Signature",
+                QMessageBox.information(self, appname+version+"Good Signature",
                                         "Good signature from:  " + verified.username +
                                         "\n\nFingerprint:  " + verified.fingerprint +
                                         "\nKey Id:  " + verified.key_id +
@@ -189,11 +189,11 @@ class MasterForm(QMainWindow):
                                         QMessageBox.Ok)
                 return
             if verified.valid is False and verified.username is None:
-                QMessageBox.warning(self, "No signature found",
+                QMessageBox.warning(self, appname+version+"No signature found",
                                     "No signature found:  " + verified.stderr, QMessageBox.Ok)
                 return
             else:
-                QMessageBox.warning(self, "Bad Signature",
+                QMessageBox.warning(self, appname+version+"Bad Signature",
                                     "Bad signature from:  " + verified.username +
                                     "\nKey Id:  " + verified.key_id + "\n\nTHE FILE IS CORRUPTED." + "\n\nDetails  :\n" + verified.stderr,
                                     QMessageBox.Ok)
@@ -209,24 +209,24 @@ class MasterForm(QMainWindow):
                                 QMessageBox.Ok)
             return
         if verified_data.valid is False:
-            QMessageBox.warning(self, "Bad Signature",
+            QMessageBox.warning(self, appname+version+"Bad Signature",
                                 "BAD SIGNATURE " + "\nDATA ARE CORRUPTED:\n\n" + "GnuPG Message: \n" + verified_data.stderr,
                                 QMessageBox.Ok)
             return
         if verified_data.valid is True:
-            QMessageBox.information(self, "Good Signature",
+            QMessageBox.information(self, appname+version+"Good Signature",
                                     "Good signature from:  " + verified_data.username +
                                     "\nID " + verified_data.key_id + "\n\nFingerprint: \n"
                                     + verified_data.fingerprint + "\n\nGnuPG Message:\n" + verified_data.stderr,
                                     QMessageBox.Ok)
         else:
-            QMessageBox.warning(self, "Error",
+            QMessageBox.warning(self, appname+version+"Error",
                                 " Error ",
                                 QMessageBox.Ok)
 
     def updatePixmap(self, boll):
         if boll == "False":
-            QMessageBox.warning(self, "Error",
+            QMessageBox.warning(self, appname+version+"Error",
                                 " Wrong passphrase " + self.originalfile,
                                 QMessageBox.Ok)
             return
@@ -244,8 +244,8 @@ class MasterForm(QMainWindow):
             key = dialog.ui.comboBox.currentText()
             signed_data = gpg.sign(texttosign, keyid=key)
             if str(signed_data) == "":
-                QMessageBox.critical(self, 'Echec Signature...',
-                                     '''The passphrase is invalid for this key.''',
+                QMessageBox.critical(self, appname+version+"Can't Sign...",
+                                     '''The passphrase is invalid for unlock this key.''',
                                      QMessageBox.Ok)
                 return
             self.ui.plainTextEdit.clear()
@@ -280,7 +280,7 @@ class MasterForm(QMainWindow):
 
                 if dialog.ui.checkSymetric.isChecked():
                     if dialog.ui.editKey.text() == "":
-                        QMessageBox.warning(self, 'Error...',
+                        QMessageBox.warning(self, appname+version+"Error...",
                                             '''You must type a passphrase.''',
                                             QMessageBox.Ok)
                         return
@@ -295,7 +295,7 @@ class MasterForm(QMainWindow):
 
                     self.myLongTask.start()
 
-                    QMessageBox.warning(self, "The file is encrypted",
+                    QMessageBox.warning(self, appname+version+"The file is encrypted",
                                         filename + ".gpg",
                                         QMessageBox.Ok)
 
@@ -329,7 +329,7 @@ class MasterForm(QMainWindow):
                     self.ui.plainTextEdit.appendPlainText(str(filename + ".gpg"))
 
     def aboutqt(self):
-        QMessageBox.aboutQt(self, 'Qt is the best !')
+        QMessageBox.aboutQt(self, appname+version+"Qt is the best !")
 
     def tamponencrypt(self):
         dialog = Fenselectkeygpg(self)
@@ -338,7 +338,7 @@ class MasterForm(QMainWindow):
             self.m_key = dialog.ui.editKey.text().strip()
             if dialog.ui.checkSymetric.isChecked():
                 if dialog.ui.editKey.text() == "":
-                    QMessageBox.warning(self, 'Error',
+                    QMessageBox.warning(self, appname+version+"Error",
                                         '''You must type a passphrase.''',
                                         QMessageBox.Ok)
                     return
@@ -377,12 +377,12 @@ class MasterForm(QMainWindow):
         if filename:
             file = QFile(filename)
             if not file.open(QFile.WriteOnly | QFile.Text):
-                QMessageBox.warning(self, "Save",
+                QMessageBox.critical(self, appname+version+"Save",
                                     "Writing Error %s:\n%s." % (filename, file.errorString()))
                 return
             outstr = QTextStream(file)
             outstr << self.ui.plainTextEdit.toPlainText()
-            QMessageBox.information(self, "Save file",
+            QMessageBox.information(self, appname+version+"Save file",
                                     "The file is saved. \n%s" % (file.fileName()))
 
     def ouvrirtexte(self):
@@ -390,7 +390,7 @@ class MasterForm(QMainWindow):
         if filename:
             file = QFile(filename)
             if not file.open(QFile.ReadOnly | QFile.Text):
-                QMessageBox.warning(self, "Open File",
+                QMessageBox.critical(self, appname+version+"Open File",
                                     "Reading Error %s:\n%s." % (filename, file.errorString()))
                 return
             instr = QTextStream(file)
@@ -409,14 +409,14 @@ class MasterForm(QMainWindow):
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText(str(decrypted_data))
         else:
-            QMessageBox.warning(self, "Invalid passphrase",
+            QMessageBox.warning(self, appname+version+"Invalid passphrase",
                                 ''' Invalid passphrase.''',
                                 QMessageBox.Ok)
             return
 
     def hashfileripemd_160(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "RIPEMD: Select File.", "",
+                                                  "RIPEMD-160: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'RIPEMD-160')
@@ -427,7 +427,7 @@ class MasterForm(QMainWindow):
 
     def hashfileripemd_128(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "RIPEMD: Select File.", "",
+                                                  "RIPEMD-128: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'RIPEMD-128')
@@ -438,7 +438,7 @@ class MasterForm(QMainWindow):
 
     def hashfilemd2(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "MD4: Select File.", "",
+                                                  "MD2: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'MD2')
@@ -449,7 +449,7 @@ class MasterForm(QMainWindow):
 
     def hashfilemd4(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "MD4: Select File.", "",
+                                                  "MD4: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'MD4')
@@ -460,7 +460,7 @@ class MasterForm(QMainWindow):
 
     def hashfilemd5(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "MD5: Select File.", "",
+                                                  "MD5: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'MD5')
@@ -471,7 +471,7 @@ class MasterForm(QMainWindow):
 
     def hashfilesha512(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA512: Select File.", "",
+                                                  "SHA-512: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'SHA-512')
@@ -482,7 +482,7 @@ class MasterForm(QMainWindow):
 
     def hashfilesha384(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA384: Select File.", "",
+                                                  "SHA-384: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'SHA-384')
@@ -493,7 +493,7 @@ class MasterForm(QMainWindow):
 
     def hashfilesha256(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA256: Select File.", "",
+                                                  "SHA-256: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'SHA-256')
@@ -504,7 +504,7 @@ class MasterForm(QMainWindow):
 
     def hashfilesha224(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA224: Select File.", "",
+                                                  "SHA-224: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)")
         if filename:
             output = simplehash.get_file_checksum(filename, 'SHA-224')
@@ -515,7 +515,7 @@ class MasterForm(QMainWindow):
 
     def hashfilesha(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "SHA-1: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'SHA-1')
@@ -526,7 +526,7 @@ class MasterForm(QMainWindow):
 
     def hashfileWhirlpool(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Whirlpool: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'Whirlpool')
@@ -537,7 +537,7 @@ class MasterForm(QMainWindow):
 
     def hashfileTiger(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Tiger: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'Tiger')
@@ -548,7 +548,7 @@ class MasterForm(QMainWindow):
 
     def hashfileAdler32(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Adler32: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'Adler32')
@@ -559,7 +559,7 @@ class MasterForm(QMainWindow):
 
     def hashfileCrc24(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Crc24: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'CRC24')
@@ -570,7 +570,7 @@ class MasterForm(QMainWindow):
 
     def hashfileCrc32(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Crc32: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'CRC32')
@@ -581,18 +581,18 @@ class MasterForm(QMainWindow):
 
     def hashfileKeccak_1600(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "SHA-3 Keccak-1600: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'Keccak-1600')
             self.ui.plainTextEdit.clear()
             self.ui.plainTextEdit.appendPlainText("----------------------------------------------")
-            self.ui.plainTextEdit.appendPlainText("Hash Keccak-1600 -->" + filename)
+            self.ui.plainTextEdit.appendPlainText("Hash SHA-3 Keccak-1600 -->" + filename)
             self.ui.plainTextEdit.appendPlainText(output)
 
     def hashfileSkein_512(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "Skein_512: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'Skein-512')
@@ -603,7 +603,7 @@ class MasterForm(QMainWindow):
 
     def hashfileGOST_34_11(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "SHA-1: Select File.", "",
+                                                  "GOST 34.11: Select File", "",
                                                   "All Files (*);;Text Files (*.txt)", )
         if filename:
             output = simplehash.get_file_checksum(filename, 'GOST-34.11')
@@ -633,13 +633,14 @@ class MasterForm(QMainWindow):
                 self.myLongTask.start()
 
             else:
-                QMessageBox.warning(self, 'Error',
+                QMessageBox.warning(self, appname+version+"Error",
                                     ''' You must enter a passphrase ''',
                                     QMessageBox.Ok)
 
     def isstarted(self, status):
         if status == "True":
             self.progress = QProgressDialog("Work in progress...", "Cancel", 0, 0)
+            self.progress.setWindowTitle(appname+version)
             self.progress.setWindowModality(Qt.ApplicationModal)
             self.progress.exec()
         else:
