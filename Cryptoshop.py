@@ -81,6 +81,8 @@ class MasterForm(QMainWindow):
         self.ui.actionD_chiffrer_un_fichier_Enigma.triggered.connect(self.decryptfileenigma)
 
         self.ui.actionSigner_un_fichier.triggered.connect(self.signfile)
+        self.ui.actionVerifier_signature.triggered.connect(self.verifysignfile)
+
         self.ui.actionVider_Tampon.triggered.connect(self.vidertampon)
         self.ui.actionOuvrir.triggered.connect(self.ouvrirtexte)
         self.ui.actionSauver.triggered.connect(self.sauvertexte)
@@ -157,6 +159,27 @@ class MasterForm(QMainWindow):
                 with open(filename, 'rb') as signfile:
                     gpg.sign_file(signfile, keyid, key, clearsign=True, detach=True, output=(filename + ".sig"))
                     signfile.close()
+
+    def verifysignfile(self):
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "Select the file to decrypt", "",
+                                                  "sign Files (*.sig);;All Files (*)")
+        if filename:
+            with open(filename, 'rb') as stream:
+                gpg = gnupg.GPG(use_agent=False)
+                data=os.path.splitext(filename)[0].split("_")[-1]
+                verified = gpg.verify_file(stream,data)
+                print(verified.trust_text)
+                print(verified.TRUST_FULLY)
+                print(verified.trust_level)
+                print(verified.status)
+                print(verified.username)
+                if verified.trust_level is not None and verified.trust_level >= verified.TRUST_FULLY:
+                    print('Trust level: %s' % verified.trust_text)
+                if not verified: raise ValueError("Signature could not be verified!")
+                else:
+                    print(verified)
+
 
     def tamponverify(self):
         texttoverify = self.ui.plainTextEdit.toPlainText()
