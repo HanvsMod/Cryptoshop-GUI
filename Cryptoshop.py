@@ -37,14 +37,20 @@ import Crypto_gpg
 import simplehash
 import botancrypt
 
+appname = " Cryptoshop "
+version = " 1.0 "
+
 
 def keymanager():
     dialog = Fenmanager()
+    dialog.setWindowTitle(appname+version+" Key manager")
     dialog.exec()
 
 
 def openabout():
     dialog = About()
+    dialog.ui.title_label.setText(appname+version)
+    dialog.setWindowTitle(appname+version+" About")
     dialog.exec()
 
 
@@ -204,7 +210,7 @@ class MasterForm(QMainWindow):
             return
         if verified_data.valid is False:
             QMessageBox.warning(self, "Bad Signature",
-                                "BAD SIGNATURE " +"\nDATA ARE CORRUPTED:\n\n" + "GnuPG Message: \n"+verified_data.stderr,
+                                "BAD SIGNATURE " + "\nDATA ARE CORRUPTED:\n\n" + "GnuPG Message: \n" + verified_data.stderr,
                                 QMessageBox.Ok)
             return
         if verified_data.valid is True:
@@ -645,5 +651,6 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     master = MasterForm()
+    master.setWindowTitle(appname+version)
     master.show()
     sys.exit(app.exec_())
