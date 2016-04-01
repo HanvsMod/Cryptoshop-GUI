@@ -73,15 +73,9 @@ def encrypt(filename, passphrase, algo):
 
     del key
 
-    print(botan.hex_encode(h1))
-    print(botan.hex_encode(h2))
-
     encryptor.set_key(h2)
     encryptor.start(iv)
     cipher = encryptor.finish(input)
-    print("vi : " + botan.hex_encode(iv))
-    print("salt :" + botan.hex_encode(salt))
-    print("cipher : " + botan.hex_encode(cipher))
 
     hmac = botan.message_authentication_code(algo='HMAC(SHA-256)')
     hmac.set_key(h1)

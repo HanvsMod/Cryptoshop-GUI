@@ -33,7 +33,7 @@ from keymanager import Fenmanager
 import gnupg
 import os
 import Crypto_gpg
-#import simplecrypt2
+# import simplecrypt2
 import simplehash
 import botancrypt
 
@@ -108,7 +108,7 @@ class MasterForm(QMainWindow):
 
     def encryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "Sélectionnez le fichier à chiffrer", "",
+                                                  "Select the file to crypt", "",
                                                   "All Files (*)")
         if filename:
             dialog = Fenselectkey(self)
@@ -121,12 +121,12 @@ class MasterForm(QMainWindow):
 
     def decryptfileenigma(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "Sélectionnez le fichier à chiffrer", "",
-                                                  "Cryptobox Files (*.cryptobox);;All Files (*)")
+                                                  "Select the file to decrypt", "",
+                                                  "Cryptoshop Files (*.cryptoshop);;All Files (*)")
 
         if filename:
-            m_key, ok = QInputDialog.getText(self, "Entrez votre passphrase",
-                                             "Clée:", QLineEdit.Normal)
+            m_key, ok = QInputDialog.getText(self, "Enter your passphrase",
+                                             "Key:", QLineEdit.Normal)
             if ok and m_key != '':
                 try:
                     enc = botancrypt.decrypt(filename, m_key)
@@ -146,16 +146,17 @@ class MasterForm(QMainWindow):
 
     def signfile(self):
         filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "Selectionez le fichier à signer", "",
-                                                  "Tous (*);;Fichiers texte (*.txt)")
+                                                  "Select a file to sign", "",
+                                                  "All files (*)")
         if filename:
             gpg = gnupg.GPG(use_agent=False)
             dialog = Fenselectsignkey(self)
             if dialog.exec_() == QDialog.Accepted:
                 keyid = dialog.ui.comboBox.currentText()
                 key = dialog.ui.editKey.text()
-                with open(filename, 'rb') as f:
-                    gpg.sign_file(self, f, keyid, key, detach=True)
+                with open(filename, 'rb') as signfile:
+                    gpg.sign_file(signfile, keyid, key, clearsign=True, detach=True, output=(filename + ".sig"))
+                    signfile.close()
 
     def tamponverify(self):
         texttoverify = self.ui.plainTextEdit.toPlainText()
@@ -170,7 +171,7 @@ class MasterForm(QMainWindow):
         # print("trust_text "+verified_data.trust_text)
         # print("username "+verified_data.username)
         if verified_data.valid is False and verified_data.status is None:
-            QMessageBox.warning(self, "Aucune signature",
+            QMessageBox.warning(self, "No valid signature",
                                 "Le texte ne comporte aucune signature valide.",
                                 QMessageBox.Ok)
             return

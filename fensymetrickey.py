@@ -38,7 +38,6 @@ class Fenselectkey(QDialog):
         key1 = self.ui.EditPass.text()
         key2 = self.ui.EditConfirm.text()
         if key1 == key2 and key1 != "":
-            print("pass match")
             self.accept()
         else:
             QMessageBox.warning(self, "Invalid Passphrase",
