@@ -87,17 +87,17 @@
         </property>
         <item>
          <property name="text">
-          <string>Serpent/GCM</string>
+          <string>Serpent-256</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Threefish-512/EAX</string>
+          <string>AES-256</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>AES-256/CTR-BE</string>
+          <string>Twofish-256</string>
          </property>
         </item>
        </widget>
