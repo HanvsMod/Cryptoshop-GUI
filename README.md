@@ -8,13 +8,9 @@ Description
 Cryptoshop is a graphical user interface for [GnuPG](https://www.gnupg.org/) and a gui for some
 crypto tools. (hash functions, encrypt in multiples strong formats).
 
-- *I am not an expert on crypto*
-- *I am not an expert with Python*
-- *I am not an expert in English*
+##DO NOT USE IN PRODUCTION
 
-**DO NOT USE IN PRODUCTION**
-
-Cryptoshop is not finished.
+This application is not finished and some changes are made every days !!!
 Need threading (but I don't understand how to make that lol), bug corrections, move to Botan Python binding because Botan is the best ! :)
 
 For more information on Botan, go here: http://botan.randombit.net/manual/python.html
