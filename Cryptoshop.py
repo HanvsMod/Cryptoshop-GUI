@@ -131,8 +131,12 @@ class MasterForm(QMainWindow):
                     algo = "twf"
 
                 result = encryptfile(filename, m_key, algo)
-                if result["success"] is True:
-                    QMessageBox.information(self, "Successfully encrypted", "No signature found:  " + verified.stderr,
+                if result["success"] == "successfully encrypted":
+                    QMessageBox.information(self, "Successfully encrypted", "File: " + filename+" is encrypted with "+algorithm,
+                                            QMessageBox.Ok)
+                else:
+                    QMessageBox.information(self, "Encryption Error",
+                                            "Encryption error: "+result,
                                             QMessageBox.Ok)
 
                 self.ui.statusbar.showMessage("File " + filename + " is encrypted.", 50000)
@@ -148,18 +152,17 @@ class MasterForm(QMainWindow):
                                              "Key:", QLineEdit.Normal)
             if ok and m_key != '':
                 try:
-                    enc = botancrypt.decrypt(filename, m_key)
-                    print(enc)
-                    if enc == "Invalid Header":
-                        QMessageBox.warning(self, appname + version + "Invalid Header",
-                                            "This file have an invalid or missing header. This is not a Cryptoshop file.",
-                                            QMessageBox.Ok)
-                    if enc == "Invalid Hmac verification":
-                        QMessageBox.warning(self, appname + version + "Error",
-                                            "Wrong Passphrase, or invalid authentification code (modified file)",
-                                            QMessageBox.Ok)
-                    if enc == "Successfully Decrypted":
-                        self.ui.statusbar.showMessage("File " + filename + " is decrypted.", 50000)
+                    result = decryptfile(filename, m_key)
+                    if result["success"] == "successfully decrypted":
+                        QMessageBox.information(self, "Successfully Decrypted",
+                                                "File: " + filename + " encrypted with " + result["algorithm"] +" was successfully decrypted",
+                                                QMessageBox.Ok)
+                    else:
+                        QMessageBox.error(self, "Decryption Error",
+                                                "Decryption Error "+result,
+                                                QMessageBox.Ok)
+
+
                 except Exception as e:
                     QMessageBox.warning(self, appname + version + "What that bug ??", (str(e)), QMessageBox.Ok)
 
