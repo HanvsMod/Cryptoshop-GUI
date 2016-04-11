@@ -132,11 +132,12 @@ class MasterForm(QMainWindow):
 
                 result = encryptfile(filename, m_key, algo)
                 if result["success"] == "successfully encrypted":
-                    QMessageBox.information(self, "Successfully encrypted", "File: " + filename+" is encrypted with "+algorithm,
+                    QMessageBox.information(self, "Successfully encrypted",
+                                            "File: " + filename + " is encrypted with " + algorithm,
                                             QMessageBox.Ok)
                 else:
                     QMessageBox.information(self, "Encryption Error",
-                                            "Encryption error: "+result,
+                                            "Encryption error: " + result["success"],
                                             QMessageBox.Ok)
 
                 self.ui.statusbar.showMessage("File " + filename + " is encrypted.", 50000)
@@ -155,13 +156,13 @@ class MasterForm(QMainWindow):
                     result = decryptfile(filename, m_key)
                     if result["success"] == "successfully decrypted":
                         QMessageBox.information(self, "Successfully Decrypted",
-                                                "File: " + filename + " encrypted with " + result["algorithm"] +" was successfully decrypted",
+                                                "File: " + filename + " encrypted with " + result[
+                                                    "algorithm"] + " was successfully decrypted",
                                                 QMessageBox.Ok)
                     else:
-                        QMessageBox.error(self, "Decryption Error",
-                                                "Decryption Error "+result,
-                                                QMessageBox.Ok)
-
+                        QMessageBox.warning(self, "Decryption Error",
+                                            "Decryption Error " + result["success"],
+                                            QMessageBox.Ok)
 
                 except Exception as e:
                     QMessageBox.warning(self, appname + version + "What that bug ??", (str(e)), QMessageBox.Ok)
